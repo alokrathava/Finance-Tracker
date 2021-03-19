@@ -198,36 +198,8 @@ public class Category extends AppCompatActivity implements CategoryAdapter.Categ
         Config.showToast(context, "Delete: " + category.getCategoryId());
         Log.e(TAG, "onDelete: " + category.getCategoryId());
 
-        Retrofit retrofit = AppConfig.getRetrofit();
-        Api service = retrofit.create(Api.class);
-
-        Call<ServerResponse> call = service.deleteCategory(Integer.parseInt(category.getCategoryId()));
-        call.enqueue(new Callback<ServerResponse>() {
-            @Override
-            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                if (response.body() != null) {
-                    ServerResponse serverResponse = response.body();
-                    if (!serverResponse.getError()) {
-                        Config.showToast(context, serverResponse.getMessage());
-                        RestartActivity();
-                    } else {
-                        Config.showToast(context, serverResponse.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ServerResponse> call, Throwable t) {
-                Config.showToast(context, t.getMessage());
-            }
-        });
-
-    }
-
-    private void RestartActivity() {
-        Log.e(TAG, "RestartActivity: Called");
-        Intent intent = getIntent();
-        finish();
+        Intent intent = new Intent(context, EditCategory.class);
+        intent.putExtra("category_id", category.getCategoryId());
         startActivity(intent);
     }
 }

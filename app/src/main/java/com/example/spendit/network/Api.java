@@ -46,9 +46,10 @@ public interface Api {
     );
 
     @FormUrlEncoded
-    @POST(my_url + "delete_category")
-    Call<ServerResponse> deleteCategory(
-            @Field("category_id") int cat_id
+    @POST(my_url + "update_category")
+    Call<ServerResponse> updateCategory(
+            @Field("category_id") int cat_id,
+            @Field("categories_name") String cat_rname
     );
 
     @FormUrlEncoded

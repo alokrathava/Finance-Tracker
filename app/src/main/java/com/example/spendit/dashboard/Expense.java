@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -61,10 +62,13 @@ public class Expense extends AppCompatActivity {
     }
 
     private void clickListener() {
-        binding.categorySpinner.setOnItemClickListener((parent, view, position, id) -> {
-            Category_id = Integer.parseInt(categories.get(position).getCategoryId());
-            Log.e(TAG, "onItemClick: " + Category_id);
-            getCategoryVal(Category_id, UID);
+        binding.categorySpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Category_id = Integer.parseInt(categories.get(position).getCategoryId());
+                Log.e(TAG, "onItemClick: " + Category_id);
+                Expense.this.getCategoryVal(Category_id, UID);
+            }
         });
     }
 
