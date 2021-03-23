@@ -10,63 +10,67 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.spendit.R;
-import com.example.spendit.databinding.ActivityEditCategoryBinding;
+import com.example.spendit.databinding.ActivityEditExpenseBinding;
 import com.example.spendit.network.Api;
 import com.example.spendit.network.AppConfig;
 import com.example.spendit.network.ServerResponse;
 import com.example.spendit.utils.Config;
+import com.example.spendit.utils.SharedPrefManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class EditCategory extends AppCompatActivity {
+public class EditExpense extends AppCompatActivity {
 
-    private static final String TAG = "EditCategory";
+    private static final String TAG = "EditExpense";
     private final Context context = this;
-    private ActivityEditCategoryBinding binding;
-    private String ReName;
-    private int Category_Id;
+    private ActivityEditExpenseBinding binding;
+    private SharedPrefManager sharedPrefManager;
+    private int UID, A_ID, A_val;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_category);
+        setContentView(R.layout.activity_edit_expense);
 
-        binding = ActivityEditCategoryBinding.inflate(getLayoutInflater());
+        binding = ActivityEditExpenseBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        sharedPrefManager = new SharedPrefManager(context);
+
         init();
     }
 
     private void init() {
-        Category_Id = Integer.parseInt(getIntent().getStringExtra("category_id"));
-        ReName = getIntent().getStringExtra("category_name");
-        Log.e(TAG, "init: " + Category_Id);
-        binding.categoryVal.setText(ReName);
-        binding.addbtn.setOnClickListener(v -> doEdit(Category_Id));
+        Log.e(TAG, "init: " + sharedPrefManager.getInt("id"));
+        UID = sharedPrefManager.getInt("id");
+        A_ID = Integer.parseInt(getIntent().getStringExtra("category_id"));
+        binding.categoryVal.setText(getIntent().getStringExtra("amount"));
+
+        binding.addbtn.setOnClickListener(v -> doUpdate());
     }
 
-    private void doEdit(int category_id) {
-        Log.e(TAG, "doEdit: " + category_id);
-        ReName = binding.categoryVal.getText().toString();
-
-        if (TextUtils.isEmpty(ReName)) {
-            binding.categoryVal.setError("All Fields Are Required");
+    private void doUpdate() {
+        A_val = Integer.parseInt(binding.categoryVal.getText().toString());
+        if (TextUtils.isEmpty(String.valueOf(A_val))) {
+            binding.categoryVal.setError("Insert Data");
         } else {
-            executeUpdate(ReName, category_id);
+            executeUpdate(A_ID, UID, A_val);
         }
     }
 
-    private void executeUpdate(String reName, int category_id) {
-        Log.e(TAG, "executeUpdate: " + reName);
-        Log.e(TAG, "executeUpdate: " + category_id);
+    private void executeUpdate(int a_id, int uid, int a_val) {
+        Log.e(TAG, "executeUpdate: " + a_id);
+        Log.e(TAG, "executeUpdate: " + uid);
+        Log.e(TAG, "executeUpdate: " + a_val);
 
         Retrofit retrofit = AppConfig.getRetrofit();
         Api service = retrofit.create(Api.class);
 
-        Call<ServerResponse> call = service.updateCategory(category_id, reName);
+        Call<ServerResponse> call = service.updateExpense(a_id, a_val);
         call.enqueue(new Callback<ServerResponse>() {
             @Override
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
@@ -74,10 +78,11 @@ public class EditCategory extends AppCompatActivity {
                     ServerResponse serverResponse = response.body();
                     if (!serverResponse.getError()) {
                         Config.showToast(context, serverResponse.getMessage());
-                        resendActivity();
-                    } else {
-                        Config.showToast(context, serverResponse.getMessage());
+                        startActivity(new Intent(context, MainActivity.class));
+                        finish();
                     }
+                } else {
+                    Config.showToast(context, response.body().getMessage());
                 }
             }
 
@@ -86,10 +91,5 @@ public class EditCategory extends AppCompatActivity {
                 Config.showToast(context, t.getMessage());
             }
         });
-    }
-
-    private void resendActivity() {
-        startActivity(new Intent(context, Category.class));
-        finish();
     }
 }

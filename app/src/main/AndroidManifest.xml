@@ -14,6 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SpendIT">
+        <activity android:name=".dashboard.EditExpense"></activity>
         <activity android:name=".dashboard.DetailExpense" />
         <activity android:name=".dashboard.EditBudget" />
         <activity android:name=".dashboard.EditCategory" />

@@ -34,7 +34,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="45sp"
-                android:text="Add Budget"
+                android:text="Budget"
+                android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textSize="36sp" />

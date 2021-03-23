@@ -26,7 +26,7 @@ public class EditBudget extends AppCompatActivity {
     private static final String TAG = "EditBudget";
     private final Context context = this;
     private ActivityEditBudgetBinding budgetBinding;
-    private int Budget_id, UID, Budget_Val;
+    private int Budget_id, UID, Budget_Val, budget_val;
     private SharedPrefManager sharedPrefManager;
 
     @Override
@@ -45,6 +45,10 @@ public class EditBudget extends AppCompatActivity {
 
     private void init() {
         Budget_id = Integer.parseInt(getIntent().getStringExtra("budget_id"));
+        budget_val = Integer.parseInt(getIntent().getStringExtra("budget_val"));
+
+        budgetBinding.categoryVal.setText(String.valueOf(budget_val));
+
         UID = sharedPrefManager.getInt("id");
         Log.e(TAG, "init: " + Budget_id);
         budgetBinding.addbtn.setOnClickListener(v -> {
@@ -69,6 +73,7 @@ public class EditBudget extends AppCompatActivity {
                     if (!serverResponse.getError()) {
                         Config.showToast(context, serverResponse.getMessage());
                         startActivity(new Intent(context, Budget.class));
+                        finish();
                     } else {
                         Config.showToast(context, serverResponse.getMessage());
                     }

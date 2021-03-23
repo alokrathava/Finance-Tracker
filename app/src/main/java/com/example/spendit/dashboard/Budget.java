@@ -254,10 +254,13 @@ public class Budget extends AppCompatActivity implements BudgetAdapter.BudgetInt
     @Override
     public void onDelete(BudgetData budgetData) {
         Config.showToast(context, "Update: " + budgetData.getSetAmountId());
+        Config.showToast(context, "Update: " + budgetData.getAmountSet());
         Log.e(TAG, "onDelete: " + budgetData.getSetAmountId());
+
 
         Intent intent = new Intent(context, EditBudget.class);
         intent.putExtra("budget_id", budgetData.getSetAmountId());
+        intent.putExtra("budget_val", budgetData.getAmountSet());
         startActivity(intent);
     }
 }

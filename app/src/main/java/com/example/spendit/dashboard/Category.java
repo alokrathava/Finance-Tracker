@@ -196,10 +196,12 @@ public class Category extends AppCompatActivity implements CategoryAdapter.Categ
     @Override
     public void onDelete(com.example.spendit.data.Category category) {
         Config.showToast(context, "Update: " + category.getCategoryId());
+        Config.showToast(context, "Update: " + category.getCategoriesName());
         Log.e(TAG, "onDelete: " + category.getCategoryId());
 
         Intent intent = new Intent(context, EditCategory.class);
         intent.putExtra("category_id", category.getCategoryId());
+        intent.putExtra("category_name", category.getCategoriesName());
         startActivity(intent);
     }
 }

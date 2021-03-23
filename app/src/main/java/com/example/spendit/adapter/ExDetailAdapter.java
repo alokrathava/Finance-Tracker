@@ -14,9 +14,11 @@ import java.util.List;
 public class ExDetailAdapter extends RecyclerView.Adapter<ExDetailAdapter.ViewHolder> {
 
     List<Exdetail> exdetailList;
+    private ExDetailInterface exDetailInterface;
 
-    public ExDetailAdapter(List<Exdetail> exdetailList) {
+    public ExDetailAdapter(List<Exdetail> exdetailList, ExDetailInterface exDetailInterface) {
         this.exdetailList = exdetailList;
+        this.exDetailInterface = exDetailInterface;
     }
 
     @NonNull
@@ -29,7 +31,10 @@ public class ExDetailAdapter extends RecyclerView.Adapter<ExDetailAdapter.ViewHo
     public void onBindViewHolder(@NonNull ExDetailAdapter.ViewHolder holder, int position) {
         Exdetail exdetail = exdetailList.get(position);
         holder.binding.Date.setText(exdetail.getAmtDate());
-        holder.binding.price.setText("₹ "+exdetail.getAmount());
+        holder.binding.price.setText("₹ " + exdetail.getAmount());
+        holder.binding.price.setOnClickListener(v -> {
+            exDetailInterface.onClick(exdetail);
+        });
     }
 
     @Override
@@ -46,5 +51,9 @@ public class ExDetailAdapter extends RecyclerView.Adapter<ExDetailAdapter.ViewHo
 
             this.binding = binding;
         }
+    }
+
+    public interface ExDetailInterface {
+        void onClick(Exdetail exdetail);
     }
 }

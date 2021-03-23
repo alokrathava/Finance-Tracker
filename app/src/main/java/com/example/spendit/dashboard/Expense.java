@@ -62,13 +62,10 @@ public class Expense extends AppCompatActivity {
     }
 
     private void clickListener() {
-        binding.categorySpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Category_id = Integer.parseInt(categories.get(position).getCategoryId());
-                Log.e(TAG, "onItemClick: " + Category_id);
-                Expense.this.getCategoryVal(Category_id, UID);
-            }
+        binding.categorySpinner.setOnItemClickListener((parent, view, position, id) -> {
+            Category_id = Integer.parseInt(categories.get(position).getCategoryId());
+            Log.e(TAG, "onItemClick: " + Category_id);
+            Expense.this.getCategoryVal(Category_id, UID);
         });
     }
 

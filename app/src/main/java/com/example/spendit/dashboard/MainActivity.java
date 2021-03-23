@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -85,32 +83,29 @@ public class MainActivity extends AppCompatActivity implements ExhistoryAdapter.
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.Home:
-                        Config.showToast(context, "Home");
-                        break;
-                    case R.id.category:
-                        Config.showToast(context, "Category");
-                        startActivity(new Intent(context, Category.class));
-                        break;
-                    case R.id.budget:
-                        Config.showToast(context, "Budget");
-                        startActivity(new Intent(context, Budget.class));
-                        break;
-                    case R.id.expense:
-                        Config.showToast(context, "Expense");
-                        startActivity(new Intent(context, Expense.class));
-                        break;
-                    case R.id.logout:
-                        Config.showToast(context, "Logout");
-                        Logout();
-                        break;
-                }
-                return true;
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.Home:
+                    Config.showToast(context, "Home");
+                    break;
+                case R.id.category:
+                    Config.showToast(context, "Category");
+                    startActivity(new Intent(context, Category.class));
+                    break;
+                case R.id.budget:
+                    Config.showToast(context, "Budget");
+                    startActivity(new Intent(context, Budget.class));
+                    break;
+                case R.id.expense:
+                    Config.showToast(context, "Expense");
+                    startActivity(new Intent(context, Expense.class));
+                    break;
+                case R.id.logout:
+                    Config.showToast(context, "Logout");
+                    Logout();
+                    break;
             }
+            return true;
         });
     }
 

@@ -59,6 +59,13 @@ public interface Api {
     );
 
     @FormUrlEncoded
+    @POST(my_url + "updateExpense")
+    Call<ServerResponse> updateExpense(
+            @Field("a_id") int a_id,
+            @Field("a_val") int a_val
+    );
+
+    @FormUrlEncoded
     @POST(my_url + "update_budget")
     Call<ServerResponse> updateBudget(
             @Field("budget_id") int budget_id,

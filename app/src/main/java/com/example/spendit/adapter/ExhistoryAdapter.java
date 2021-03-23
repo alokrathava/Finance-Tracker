@@ -56,7 +56,7 @@ public class ExhistoryAdapter extends RecyclerView.Adapter<ExhistoryAdapter.View
             holder.binding.amount.setText("₹ " + exphistory.getAmount());
             holder.binding.amountSet.setText(exphistory.getAmountSet());
         }
-        holder.binding.serialno.setOnClickListener(v -> exHistoryInterface.onClick(exphistory));
+        holder.binding.amount.setOnClickListener(v -> exHistoryInterface.onClick(exphistory));
     }
 
     @Override

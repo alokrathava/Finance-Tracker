@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.spendit.dashboard.Budget;
 import com.example.spendit.data.BudgetData;
 import com.example.spendit.databinding.LayoutbudgetBinding;
 
@@ -35,7 +34,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
         int cnt = ++position;
         holder.binding.serialno.setText(String.valueOf(cnt));
         holder.binding.categoryName.setText(budgetData.getCategories_name());
-        holder.binding.budget.setText(budgetData.getAmountSet());
+        holder.binding.budget.setText("₹ " + budgetData.getAmountSet());
         holder.binding.deletebtn.setOnClickListener(v -> {
             budgetInterface.onDelete(budgetData);
         });
