@@ -13,7 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.spendit.R;
+import com.example.spendit.adapter.BudgetAdapter;
 import com.example.spendit.auth.Login;
+import com.example.spendit.data.BudgetData;
 import com.example.spendit.data.Category;
 import com.example.spendit.databinding.ActivityBudgetBinding;
 import com.example.spendit.network.Api;
@@ -31,10 +33,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class Budget extends AppCompatActivity {
+public class Budget extends AppCompatActivity implements BudgetAdapter.BudgetInterface {
 
     private static final String TAG = "Budget";
     private final Context context = this;
+    private final List<Category> categories = new ArrayList<>();
     private ActivityBudgetBinding binding;
     private SharedPrefManager sharedPrefManager;
     private NavigationView navigationView;
@@ -42,9 +45,9 @@ public class Budget extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private androidx.appcompat.widget.Toolbar mtoolbar;
     private int UID, Category_id, Budget;
-    private final List<Category> categories = new ArrayList<>();
     private ArrayAdapter<String> arrayAdapter;
-
+    private final List<BudgetData> budgetDataList = new ArrayList<>();
+    private BudgetAdapter budgetAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +74,18 @@ public class Budget extends AppCompatActivity {
         sharedPrefManager.getString("name");
         UID = sharedPrefManager.getInt("id");
         getCategory(UID);
-
+        getBudgetValues(UID);
         /*Navigation Drawer Header*/
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navmenu);
+        NavigationView navigationView = findViewById(R.id.navmenu);
         View headerView = navigationView.getHeaderView(0);
-        TextView navUsername = (TextView) headerView.findViewById(R.id.nameTitle);
+        TextView navUsername = headerView.findViewById(R.id.nameTitle);
         navUsername.setText(sharedPrefManager.getString("name"));
+
+        /*===================Recycle Attendance Adapter========================*/
+        budgetAdapter = new BudgetAdapter(budgetDataList, this);
+        binding.recyclebudget.setHasFixedSize(true);
+        binding.recyclebudget.setAdapter(budgetAdapter);
+
 
         /*Navigational Drawer*/
         mtoolbar = binding.toolbar;
@@ -115,6 +124,37 @@ public class Budget extends AppCompatActivity {
         binding.addbtn.setOnClickListener(v -> {
             Budget = Integer.parseInt(binding.budgetval.getText().toString());
             addBudget(Category_id, Budget, UID);
+        });
+
+    }
+
+    private void getBudgetValues(int uid) {
+        Log.e(TAG, "getBudgetValues: " + uid);
+
+        Retrofit retrofit = AppConfig.getRetrofit();
+        Api service = retrofit.create(Api.class);
+
+        Call<ServerResponse> call = service.getBudget(uid);
+        call.enqueue(new Callback<ServerResponse>() {
+            @Override
+            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                if (response.body() != null) {
+                    ServerResponse serverResponse = response.body();
+                    if (!serverResponse.getError()) {
+                        Config.showToast(context, serverResponse.getMessage());
+                        budgetDataList.clear();
+                        budgetDataList.addAll(serverResponse.getBudget());
+                        budgetAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    Config.showToast(context, response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ServerResponse> call, Throwable t) {
+                Config.showToast(context, t.getMessage());
+            }
         });
 
     }
@@ -204,10 +244,20 @@ public class Budget extends AppCompatActivity {
     private void Logout() {
         sharedPrefManager.clear();
         MoveToActivity();
+        finish();
     }
 
     private void MoveToActivity() {
         startActivity(new Intent(context, Login.class));
     }
 
+    @Override
+    public void onDelete(BudgetData budgetData) {
+        Config.showToast(context, "Update: " + budgetData.getSetAmountId());
+        Log.e(TAG, "onDelete: " + budgetData.getSetAmountId());
+
+        Intent intent = new Intent(context, EditBudget.class);
+        intent.putExtra("budget_id", budgetData.getSetAmountId());
+        startActivity(intent);
+    }
 }

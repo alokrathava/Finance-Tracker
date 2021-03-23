@@ -1,6 +1,8 @@
 package com.example.spendit.network;
 
+import com.example.spendit.data.BudgetData;
 import com.example.spendit.data.Category;
+import com.example.spendit.data.Exdetail;
 import com.example.spendit.data.Expenses;
 import com.example.spendit.data.Exphistory;
 import com.example.spendit.data.Users;
@@ -28,6 +30,12 @@ public class ServerResponse {
     @SerializedName("exphistory")
     @Expose
     private List<Exphistory> exphistory = null;
+    @SerializedName("Budget")
+    @Expose
+    private List<BudgetData> budget = null;
+    @SerializedName("exdetails")
+    @Expose
+    private List<Exdetail> exdetails = null;
 
     public Boolean getError() {
         return error;
@@ -75,5 +83,21 @@ public class ServerResponse {
 
     public void setExphistory(List<Exphistory> exphistory) {
         this.exphistory = exphistory;
+    }
+
+    public List<BudgetData> getBudget() {
+        return budget;
+    }
+
+    public void setBudget(List<BudgetData> budget) {
+        this.budget = budget;
+    }
+
+    public List<Exdetail> getExdetails() {
+        return exdetails;
+    }
+
+    public void setExdetails(List<Exdetail> exdetails) {
+        this.exdetails = exdetails;
     }
 }

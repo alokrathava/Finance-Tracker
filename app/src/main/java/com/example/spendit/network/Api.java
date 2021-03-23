@@ -46,10 +46,23 @@ public interface Api {
     );
 
     @FormUrlEncoded
+    @POST(my_url + "getbudget")
+    Call<ServerResponse> getBudget(
+            @Field("user_id") int u_id
+    );
+
+    @FormUrlEncoded
     @POST(my_url + "update_category")
     Call<ServerResponse> updateCategory(
             @Field("category_id") int cat_id,
             @Field("categories_name") String cat_rname
+    );
+
+    @FormUrlEncoded
+    @POST(my_url + "update_budget")
+    Call<ServerResponse> updateBudget(
+            @Field("budget_id") int budget_id,
+            @Field("budget_Val") int budget_Val
     );
 
     @FormUrlEncoded
@@ -64,6 +77,13 @@ public interface Api {
     @POST(my_url + "get_categoryval")
     Call<ServerResponse> getCategoryVal(
             @Field("category_id") int cat_id,
+            @Field("user_id") int user_id
+    );
+
+    @FormUrlEncoded
+    @POST(my_url + "getExpenseDetail")
+    Call<ServerResponse> getExpenseDetail(
+            @Field("cat_id") String cat_id,
             @Field("user_id") int user_id
     );
 

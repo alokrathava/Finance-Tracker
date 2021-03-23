@@ -33,18 +33,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ExhistoryAdapter.ExHistoryInterface {
 
+    private static final String TAG = "MainActivity";
     private final Context context = this;
     private ActivityMainBinding binding;
-    private static final String TAG = "MainActivity";
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private DrawerLayout drawerLayout;
     private androidx.appcompat.widget.Toolbar mtoolbar;
     private SharedPrefManager sharedPrefManager;
     private int User_Id;
-    private List<Exphistory> exphistories = new ArrayList<>();
+    private final List<Exphistory> exphistories = new ArrayList<>();
     private ExhistoryAdapter exhistoryAdapter;
 
     @Override
@@ -66,14 +66,14 @@ public class MainActivity extends AppCompatActivity {
         getExpenseHistory(User_Id);
 
         /*===================Recycle Attendance Adapter========================*/
-        exhistoryAdapter = new ExhistoryAdapter(exphistories);
+        exhistoryAdapter = new ExhistoryAdapter(exphistories, this);
         binding.recycleexpense.setHasFixedSize(true);
         binding.recycleexpense.setAdapter(exhistoryAdapter);
 
         /*Navigation Drawer Header*/
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navmenu);
+        NavigationView navigationView = findViewById(R.id.navmenu);
         View headerView = navigationView.getHeaderView(0);
-        TextView navUsername = (TextView) headerView.findViewById(R.id.nameTitle);
+        TextView navUsername = headerView.findViewById(R.id.nameTitle);
         navUsername.setText(sharedPrefManager.getString("name"));
 
         /*Navigational Drawer*/
@@ -154,5 +154,15 @@ public class MainActivity extends AppCompatActivity {
     private void MoveToActivity() {
         startActivity(new Intent(context, Login.class));
         finish();
+    }
+
+    @Override
+    public void onClick(Exphistory exphistory) {
+        Config.showToast(context, "Detail: " + exphistory.getCategoryId());
+        Log.e(TAG, "onDelete: " + exphistory.getCategoryId());
+
+        Intent intent = new Intent(context, DetailExpense.class);
+        intent.putExtra("Category_id", exphistory.getCategoryId());
+        startActivity(intent);
     }
 }

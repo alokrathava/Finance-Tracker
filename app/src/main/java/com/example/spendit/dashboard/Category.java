@@ -34,8 +34,8 @@ import retrofit2.Retrofit;
 public class Category extends AppCompatActivity implements CategoryAdapter.CategoryInterface {
 
     private static final String TAG = "Category";
-    private ActivityCategoryBinding binding;
     private final Context context = this;
+    private ActivityCategoryBinding binding;
     private SharedPrefManager sharedPrefManager;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -43,7 +43,7 @@ public class Category extends AppCompatActivity implements CategoryAdapter.Categ
     private androidx.appcompat.widget.Toolbar mtoolbar;
     private String Category;
     private int UID;
-    private List<com.example.spendit.data.Category> categories = new ArrayList<>();
+    private final List<com.example.spendit.data.Category> categories = new ArrayList<>();
     private CategoryAdapter categoryAdapter;
 
     @Override
@@ -67,9 +67,9 @@ public class Category extends AppCompatActivity implements CategoryAdapter.Categ
         getCategory(UID);
 
         /*Navigation Drawer Header*/
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navmenu);
+        NavigationView navigationView = findViewById(R.id.navmenu);
         View headerView = navigationView.getHeaderView(0);
-        TextView navUsername = (TextView) headerView.findViewById(R.id.nameTitle);
+        TextView navUsername = headerView.findViewById(R.id.nameTitle);
         navUsername.setText(sharedPrefManager.getString("name"));
 
         /*Add Category*/
@@ -195,7 +195,7 @@ public class Category extends AppCompatActivity implements CategoryAdapter.Categ
 
     @Override
     public void onDelete(com.example.spendit.data.Category category) {
-        Config.showToast(context, "Delete: " + category.getCategoryId());
+        Config.showToast(context, "Update: " + category.getCategoryId());
         Log.e(TAG, "onDelete: " + category.getCategoryId());
 
         Intent intent = new Intent(context, EditCategory.class);

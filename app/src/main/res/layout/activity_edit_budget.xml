@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#E1F5FE"
     android:orientation="vertical"
-    tools:context=".dashboard.EditCategory"
+    tools:context=".dashboard.EditBudget"
     tools:openDrawer="end">
 
     <RelativeLayout
@@ -18,8 +18,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/gradient"
             app:title="@string/app_name"
+            android:background="@drawable/gradient"
             app:titleMarginStart="10sp"
             app:titleTextColor="@color/white" />
 
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40sp"
                 android:layout_marginBottom="25sp"
-                android:text="update categories"
+                android:text="update Budget"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10sp"
-                android:hint="Category Name"
+                android:hint="Budget"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -54,7 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:outlineAmbientShadowColor="#BDBDBD"
                     android:textSize="15sp" />
 
@@ -67,11 +67,10 @@
                 android:layout_marginTop="10sp"
                 android:backgroundTint="#29B6F6"
                 android:padding="10sp"
-                android:text="Update Category" />
+                android:text="Update Budget" />
 
         </LinearLayout>
 
     </RelativeLayout>
-
 
 </LinearLayout>

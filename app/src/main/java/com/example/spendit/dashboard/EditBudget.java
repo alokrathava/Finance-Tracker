@@ -3,68 +3,64 @@ package com.example.spendit.dashboard;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.spendit.R;
-import com.example.spendit.databinding.ActivityEditCategoryBinding;
+import com.example.spendit.databinding.ActivityEditBudgetBinding;
 import com.example.spendit.network.Api;
 import com.example.spendit.network.AppConfig;
 import com.example.spendit.network.ServerResponse;
 import com.example.spendit.utils.Config;
+import com.example.spendit.utils.SharedPrefManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class EditCategory extends AppCompatActivity {
+public class EditBudget extends AppCompatActivity {
 
-    private static final String TAG = "EditCategory";
+    private static final String TAG = "EditBudget";
     private final Context context = this;
-    private ActivityEditCategoryBinding binding;
-    private String ReName;
-    private int Category_Id;
+    private ActivityEditBudgetBinding budgetBinding;
+    private int Budget_id, UID, Budget_Val;
+    private SharedPrefManager sharedPrefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_category);
+        setContentView(R.layout.activity_edit_budget);
 
-        binding = ActivityEditCategoryBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
+        budgetBinding = ActivityEditBudgetBinding.inflate(getLayoutInflater());
+        View view = budgetBinding.getRoot();
         setContentView(view);
+
+        sharedPrefManager = new SharedPrefManager(context);
+
         init();
     }
 
     private void init() {
-        Category_Id = Integer.parseInt(getIntent().getStringExtra("category_id"));
-        Log.e(TAG, "init: " + Category_Id);
-        binding.addbtn.setOnClickListener(v -> doEdit(Category_Id));
+        Budget_id = Integer.parseInt(getIntent().getStringExtra("budget_id"));
+        UID = sharedPrefManager.getInt("id");
+        Log.e(TAG, "init: " + Budget_id);
+        budgetBinding.addbtn.setOnClickListener(v -> {
+            Budget_Val = Integer.parseInt(budgetBinding.categoryVal.getText().toString());
+            doEdit(Budget_id, Budget_Val);
+        });
     }
 
-    private void doEdit(int category_id) {
-        Log.e(TAG, "doEdit: " + category_id);
-        ReName = binding.categoryVal.getText().toString();
-
-        if (TextUtils.isEmpty(ReName)) {
-            binding.categoryVal.setError("All Fields Are Required");
-        } else {
-            executeUpdate(ReName, category_id);
-        }
-    }
-
-    private void executeUpdate(String reName, int category_id) {
-        Log.e(TAG, "executeUpdate: " + reName);
-        Log.e(TAG, "executeUpdate: " + category_id);
+    private void doEdit(int budget_id, int budget_Val) {
+        Log.e(TAG, "doEdit: " + budget_id);
+        Log.e(TAG, "doEdit: " + budget_Val);
 
         Retrofit retrofit = AppConfig.getRetrofit();
         Api service = retrofit.create(Api.class);
 
-        Call<ServerResponse> call = service.updateCategory(category_id, reName);
+        Call<ServerResponse> call = service.updateBudget(budget_id, budget_Val);
         call.enqueue(new Callback<ServerResponse>() {
             @Override
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
@@ -72,10 +68,12 @@ public class EditCategory extends AppCompatActivity {
                     ServerResponse serverResponse = response.body();
                     if (!serverResponse.getError()) {
                         Config.showToast(context, serverResponse.getMessage());
-                        resendActivity();
+                        startActivity(new Intent(context, Budget.class));
                     } else {
                         Config.showToast(context, serverResponse.getMessage());
                     }
+                } else {
+                    Config.showToast(context, response.body().getMessage());
                 }
             }
 
@@ -86,7 +84,5 @@ public class EditCategory extends AppCompatActivity {
         });
     }
 
-    private void resendActivity() {
-        startActivity(new Intent(context, Category.class));
-    }
+
 }

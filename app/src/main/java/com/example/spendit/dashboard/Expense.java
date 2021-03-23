@@ -38,12 +38,12 @@ public class Expense extends AppCompatActivity {
 
     private static final String TAG = "Expense";
     private final Context context = this;
+    private final List<Category> categories = new ArrayList<>();
     private ActivityExpenseBinding binding;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private DrawerLayout drawerLayout;
     private androidx.appcompat.widget.Toolbar mtoolbar;
-    private final List<Category> categories = new ArrayList<>();
     private ArrayAdapter<String> arrayAdapter;
     private SharedPrefManager sharedPrefManager;
     private int UID, Category_id, Set_amount_id, amount;
@@ -118,9 +118,9 @@ public class Expense extends AppCompatActivity {
         getCategory(UID);
 
         /*Navigation Drawer Header*/
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navmenu);
+        NavigationView navigationView = findViewById(R.id.navmenu);
         View headerView = navigationView.getHeaderView(0);
-        TextView navUsername = (TextView) headerView.findViewById(R.id.nameTitle);
+        TextView navUsername = headerView.findViewById(R.id.nameTitle);
         navUsername.setText(sharedPrefManager.getString("name"));
 
         /*Navigational Drawer*/

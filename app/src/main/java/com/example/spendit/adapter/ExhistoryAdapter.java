@@ -15,9 +15,11 @@ import java.util.List;
 public class ExhistoryAdapter extends RecyclerView.Adapter<ExhistoryAdapter.ViewHolder> {
 
     private List<Exphistory> exphistories;
+    private ExHistoryInterface exHistoryInterface;
 
-    public ExhistoryAdapter(List<Exphistory> exphistories) {
+    public ExhistoryAdapter(List<Exphistory> exphistories, ExHistoryInterface exHistoryInterface) {
         this.exphistories = exphistories;
+        this.exHistoryInterface = exHistoryInterface;
     }
 
 
@@ -44,16 +46,17 @@ public class ExhistoryAdapter extends RecyclerView.Adapter<ExhistoryAdapter.View
             holder.binding.categoryName.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.white));
             holder.binding.categoryName.setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.red));
             /*Value*/
-            holder.binding.amount.setText(exphistory.getAmount());
+            holder.binding.amount.setText("₹ " + exphistory.getAmount());
             holder.binding.amountSet.setText(exphistory.getAmountSet());
             holder.binding.serialno.setText(String.valueOf(cnt));
             holder.binding.categoryName.setText(exphistory.getCategoriesName());
         } else {
             holder.binding.serialno.setText(String.valueOf(cnt));
             holder.binding.categoryName.setText(exphistory.getCategoriesName());
-            holder.binding.amount.setText(exphistory.getAmount());
+            holder.binding.amount.setText("₹ " + exphistory.getAmount());
             holder.binding.amountSet.setText(exphistory.getAmountSet());
         }
+        holder.binding.serialno.setOnClickListener(v -> exHistoryInterface.onClick(exphistory));
     }
 
     @Override
@@ -69,5 +72,9 @@ public class ExhistoryAdapter extends RecyclerView.Adapter<ExhistoryAdapter.View
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+
+    public interface ExHistoryInterface {
+        void onClick(Exphistory exphistory);
     }
 }
